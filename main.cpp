@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
+#include "gl2d.h"
 
 int main() {
 	glfwInit();
@@ -26,11 +27,20 @@ int main() {
 	gladLoadGL();
 	glViewport(0, 0, windowWidth, windowHeight);
 
+	gl2d::init();
+	gl2d::Renderer2D renderer;
+	renderer.create();
+
 	while (!glfwWindowShouldClose(window)) {
+		renderer.updateWindowMetrics(windowWidth, windowHeight);
+		renderer.clearScreen({ 0.0f, 0.0f, 0.0f, 0.0f });
+		renderer.renderRectangle({ 350, 350, 100, 100 }, { 1.0f, 1.0f, 1.0f, 1.0f }, {}, 0);
+		renderer.flush();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
+	renderer.cleanup();
 	glfwDestroyWindow(window);
 	glfwTerminate();
 
