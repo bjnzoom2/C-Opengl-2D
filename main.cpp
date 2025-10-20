@@ -35,7 +35,7 @@ bool gameLogic(GLFWwindow *window) {
 	}
 
 	if (move.x != 0 || move.y != 0) {
-		move = glm::normalize(move);
+		move = glm::normalize(move) / glm::vec2(2, 2);
 		data.playerPosition += move;
 	}
 
