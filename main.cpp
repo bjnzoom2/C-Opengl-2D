@@ -6,7 +6,7 @@
 
 struct gameData {
 	glm::vec2 playerPosition = { 350, 350 };
-	glm::vec2 playerSize = { 100, 100 };
+	glm::vec2 playerSize = { 80, 80 };
 	float playerRotation = 0.0f;
 };
 
@@ -32,13 +32,12 @@ void playerRotate(GLFWwindow* window, double xpos, double ypos) {
 	data.playerRotation = atan2(mouseDirection.y, -mouseDirection.x);
 }
 
-bool gameLogic(GLFWwindow *window) {
+bool gameLogic(GLFWwindow *window, float deltatime) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT);
 	renderer.updateWindowMetrics(windowWidth, windowHeight);
 	renderer.clearScreen({ 0.0f, 0.0f, 0.0f, 0.0f });
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	glm::dvec2 cursorPos = {};
 	glfwGetCursorPos(window, &cursorPos.x, &cursorPos.y);
 	playerRotate(window, cursorPos.x, cursorPos.y);
@@ -62,7 +61,8 @@ bool gameLogic(GLFWwindow *window) {
 	}
 
 	if (move.x != 0 || move.y != 0) {
-		move = glm::normalize(move) / glm::vec2(2, 2);
+		move = glm::normalize(move);
+		move *= deltatime * 300;
 		data.playerPosition += move;
 	}
 
@@ -97,8 +97,17 @@ int main() {
 	gl2d::init();
 	renderer.create();
 
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+	float deltatime = 0;
+	float lastframe = 0;
+
 	while (!glfwWindowShouldClose(window)) {
-		gameLogic(window);
+		float currentframe = glfwGetTime();
+		deltatime = currentframe - lastframe;
+		lastframe = currentframe;
+
+		gameLogic(window, deltatime);
 	}
 
 	renderer.cleanup();
