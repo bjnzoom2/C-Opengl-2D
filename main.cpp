@@ -6,12 +6,31 @@
 
 struct gameData {
 	glm::vec2 playerPosition = { 350, 350 };
+	glm::vec2 playerSize = { 100, 100 };
+	float playerRotation = 0.0f;
 };
 
 gl2d::Renderer2D renderer;
 gameData data;
+
 unsigned int windowWidth = 800;
 unsigned int windowHeight = 800;
+
+void playerRotate(GLFWwindow* window, double xpos, double ypos) {
+	glm::vec2 mousePos(xpos, ypos);
+	glm::vec2 playerPos = data.playerPosition + data.playerSize / glm::vec2(2, 2);
+
+	glm::vec2 mouseDirection = mousePos - playerPos;
+
+	if (glm::length(mouseDirection) == 0) {
+		mouseDirection = { 1, 0 };
+	}
+	else {
+		mouseDirection = glm::normalize(mouseDirection);
+	}
+
+	data.playerRotation = atan2(mouseDirection.y, -mouseDirection.x);
+}
 
 bool gameLogic(GLFWwindow *window) {
 	glViewport(0, 0, windowWidth, windowHeight);
@@ -19,8 +38,16 @@ bool gameLogic(GLFWwindow *window) {
 	renderer.updateWindowMetrics(windowWidth, windowHeight);
 	renderer.clearScreen({ 0.0f, 0.0f, 0.0f, 0.0f });
 
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glm::dvec2 cursorPos = {};
+	glfwGetCursorPos(window, &cursorPos.x, &cursorPos.y);
+	playerRotate(window, cursorPos.x, cursorPos.y);
+
 	glm::vec2 move = {};
 
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, true);
+	}
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 		move.y = -1;
 	}
@@ -39,7 +66,7 @@ bool gameLogic(GLFWwindow *window) {
 		data.playerPosition += move;
 	}
 
-	renderer.renderRectangle({ data.playerPosition, 100, 100 }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	renderer.renderRectangle({ data.playerPosition, data.playerSize }, { 1.0f, 1.0f, 1.0f, 1.0f }, {}, glm::degrees(data.playerRotation) + 90);
 	renderer.flush();
 
 	glfwSwapBuffers(window);
