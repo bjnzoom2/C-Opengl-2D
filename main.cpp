@@ -3,11 +3,15 @@
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include "gl2d.h"
+#include "bullet.h"
+
 
 struct gameData {
 	glm::vec2 playerPosition = { 350, 350 };
 	glm::vec2 playerSize = { 80, 80 };
 	float playerRotation = 0.0f;
+
+	std::vector<Bullet> bullets = {};
 };
 
 gl2d::Renderer2D renderer;
@@ -16,31 +20,11 @@ gameData data;
 unsigned int windowWidth = 800;
 unsigned int windowHeight = 800;
 
-void playerRotate(GLFWwindow* window, double xpos, double ypos) {
-	glm::vec2 mousePos(xpos, ypos);
-	glm::vec2 playerPos = data.playerPosition + data.playerSize / glm::vec2(2, 2);
-
-	glm::vec2 mouseDirection = mousePos - playerPos;
-
-	if (glm::length(mouseDirection) == 0) {
-		mouseDirection = { 1, 0 };
-	}
-	else {
-		mouseDirection = glm::normalize(mouseDirection);
-	}
-
-	data.playerRotation = atan2(mouseDirection.y, -mouseDirection.x);
-}
-
 bool gameLogic(GLFWwindow *window, float deltatime) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT);
 	renderer.updateWindowMetrics(windowWidth, windowHeight);
 	renderer.clearScreen({ 0.0f, 0.0f, 0.0f, 0.0f });
-
-	glm::dvec2 cursorPos = {};
-	glfwGetCursorPos(window, &cursorPos.x, &cursorPos.y);
-	playerRotate(window, cursorPos.x, cursorPos.y);
 
 	glm::vec2 move = {};
 
@@ -66,7 +50,36 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 		data.playerPosition += move;
 	}
 
+	glm::dvec2 cursorPos = {};
+	glfwGetCursorPos(window, &cursorPos.x, &cursorPos.y);
+
+	glm::vec2 playerPos = data.playerPosition + data.playerSize / glm::vec2(2, 2);
+
+	glm::vec2 mouseDirection = (glm::vec2)cursorPos - playerPos;
+
+	if (glm::length(mouseDirection) == 0) {
+		mouseDirection = { 1, 0 };
+	}
+	else {
+		mouseDirection = glm::normalize(mouseDirection);
+	}
+
+	data.playerRotation = atan2(mouseDirection.y, -mouseDirection.x);
+
 	renderer.renderRectangle({ data.playerPosition, data.playerSize }, { 1.0f, 1.0f, 1.0f, 1.0f }, {}, glm::degrees(data.playerRotation) + 90);
+
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+		Bullet b;
+		b.position = playerPos;
+		b.direction = mouseDirection;
+
+		data.bullets.push_back(b);
+	}
+	for (auto& b : data.bullets) {
+		b.render(renderer);
+		b.step(deltatime);
+	}
+
 	renderer.flush();
 
 	glfwSwapBuffers(window);
