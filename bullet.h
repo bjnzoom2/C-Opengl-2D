@@ -11,6 +11,6 @@ struct Bullet {
 	}
 
 	void step(float deltatime) {
-		position += direction * deltatime * 1000.0f;
+		position += direction * deltatime * 1500.0f;
 	}
 };

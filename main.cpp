@@ -75,6 +75,16 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 
 		data.bullets.push_back(b);
 	}
+	for (int i = 0; i < data.bullets.size(); i++) {
+		if (glm::distance(playerPos, data.bullets[i].position) > 3500) {
+			data.bullets.erase(data.bullets.begin() + i);
+			i--;
+			continue;
+		}
+
+		data.bullets[i].step(deltatime);
+	}
+
 	for (auto& b : data.bullets) {
 		b.render(renderer);
 		b.step(deltatime);
