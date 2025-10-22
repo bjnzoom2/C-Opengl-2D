@@ -3,15 +3,14 @@
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include "gl2d.h"
-#include "bullet.h"
-
+#include "obstacle.h"
 
 struct gameData {
-	glm::vec2 playerPosition = { 350, 350 };
+	glm::vec2 playerPosition = { 100, 350 };
 	glm::vec2 playerSize = { 80, 80 };
 	float playerRotation = 0.0f;
 
-	std::vector<Bullet> bullets = {};
+	std::vector<Obstacle> obstacles = {};
 };
 
 gl2d::Renderer2D renderer;
@@ -27,6 +26,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	renderer.clearScreen({ 0.0f, 0.0f, 0.0f, 0.0f });
 
 	glm::vec2 move = {};
+	glm::vec2 playerPos = { data.playerPosition - data.playerSize / glm::vec2(2, 2) };
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
@@ -49,46 +49,27 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 		move *= deltatime * 300;
 		data.playerPosition += move;
 	}
+	Obstacle obs;
+	obs.position = glm::vec2(800, rand() % 800 + 1);
 
-	glm::dvec2 cursorPos = {};
-	glfwGetCursorPos(window, &cursorPos.x, &cursorPos.y);
+	data.obstacles.push_back(obs);
 
-	glm::vec2 playerPos = data.playerPosition + data.playerSize / glm::vec2(2, 2);
-
-	glm::vec2 mouseDirection = (glm::vec2)cursorPos - playerPos;
-
-	if (glm::length(mouseDirection) == 0) {
-		mouseDirection = { 1, 0 };
-	}
-	else {
-		mouseDirection = glm::normalize(mouseDirection);
-	}
-
-	data.playerRotation = atan2(mouseDirection.y, -mouseDirection.x);
-
-	renderer.renderRectangle({ data.playerPosition, data.playerSize }, { 1.0f, 1.0f, 1.0f, 1.0f }, {}, glm::degrees(data.playerRotation) + 90);
-
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-		Bullet b;
-		b.position = playerPos;
-		b.direction = mouseDirection;
-
-		data.bullets.push_back(b);
-	}
-	for (int i = 0; i < data.bullets.size(); i++) {
-		if (glm::distance(playerPos, data.bullets[i].position) > 3500) {
-			data.bullets.erase(data.bullets.begin() + i);
+	for (int i = 0; i < data.obstacles.size(); i++) {
+		if (glm::distance(playerPos, data.obstacles[i].position) > 2000) {
+			data.obstacles.erase(data.obstacles.begin() + i);
 			i--;
 			continue;
 		}
 
-		data.bullets[i].step(deltatime);
+		obs.step(deltatime);
 	}
 
-	for (auto& b : data.bullets) {
-		b.render(renderer);
-		b.step(deltatime);
+	for (Obstacle& obs : data.obstacles) {
+		obs.render(renderer);
+		obs.step(deltatime);
 	}
+
+	renderer.renderRectangle({ data.playerPosition, data.playerSize }, { 1.0f, 1.0f, 1.0f, 1.0f }, {}, 0);
 
 	renderer.flush();
 
@@ -99,6 +80,8 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 }
 
 int main() {
+	srand(time(NULL));
+
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

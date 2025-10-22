@@ -29,7 +29,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bullet.h">
+    <ClInclude Include="obstacle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
