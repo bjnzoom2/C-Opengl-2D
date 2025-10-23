@@ -25,6 +25,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	renderer.updateWindowMetrics(windowWidth, windowHeight);
 	renderer.clearScreen({ 0.0f, 0.0f, 0.0f, 0.0f });
 
+	static float spawnTimer = 0.0f;
 	glm::vec2 move = {};
 	glm::vec2 playerPos = { data.playerPosition - data.playerSize / glm::vec2(2, 2) };
 
@@ -49,24 +50,29 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 		move *= deltatime * 300;
 		data.playerPosition += move;
 	}
-	Obstacle obs;
-	obs.position = glm::vec2(800, rand() % 800 + 1);
 
-	data.obstacles.push_back(obs);
+	spawnTimer += deltatime;
+	while (spawnTimer >= 0.5f) {
+		spawnTimer -= 0.5f;
+		Obstacle obs;
+		float y = 10.0f + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * (static_cast<float>(windowHeight) - 20.0f);
+		obs.position = glm::vec2(800.0f, y);
+		data.obstacles.push_back(obs);
+	}
 
-	for (int i = 0; i < data.obstacles.size(); i++) {
+
+	for (int i = 0; i < (int)data.obstacles.size(); i++) {
 		if (glm::distance(playerPos, data.obstacles[i].position) > 2000) {
 			data.obstacles.erase(data.obstacles.begin() + i);
 			i--;
 			continue;
 		}
 
-		obs.step(deltatime);
+		data.obstacles[i].step(deltatime);
 	}
 
-	for (Obstacle& obs : data.obstacles) {
-		obs.render(renderer);
-		obs.step(deltatime);
+	for (int i = 0; i < (int)data.obstacles.size(); i++) {
+		data.obstacles[i].render(renderer);
 	}
 
 	renderer.renderRectangle({ data.playerPosition, data.playerSize }, { 1.0f, 1.0f, 1.0f, 1.0f }, {}, 0);
