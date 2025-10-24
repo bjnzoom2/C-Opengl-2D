@@ -1,4 +1,4 @@
-#include <iostream>
+ #include <iostream>
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
@@ -35,14 +35,8 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 		move.y = -1;
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-		move.x = -1;
-	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 		move.y = 1;
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		move.x = 1;
 	}
 
 	if (move.x != 0 || move.y != 0) {
@@ -62,7 +56,14 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 
 
 	for (int i = 0; i < (int)data.obstacles.size(); i++) {
-		if (glm::distance(playerPos, data.obstacles[i].position) > 2000) {
+		if (glm::distance(playerPos, data.obstacles[i].position) > 2000 || glm::distance(playerPos, data.obstacles[i].position - glm::vec2(10, 10)) <= 50) {
+			data.obstacles.erase(data.obstacles.begin() + i);
+			i--;
+			continue;
+		}
+
+		if (glm::distance(playerPos, data.obstacles[i].position - glm::vec2(10, 10)) <= 30) {
+			std::cout << "HIT" << '\n';
 			data.obstacles.erase(data.obstacles.begin() + i);
 			i--;
 			continue;
