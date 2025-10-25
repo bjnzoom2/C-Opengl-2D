@@ -26,7 +26,7 @@ public:
 	glm::vec2 size = { 80, 80 };
 
 	glm::dvec2 velocity = { 0, 0 };
-	double mass = 10000000;
+	double mass = 1e18;
 	double gravity = 0;
 
 	void render(gl2d::Renderer2D& renderer) {
@@ -41,8 +41,9 @@ public:
 	void step(float deltatime, double GCONSTANT, Object& otherObj) {
 		glm::dvec2 direction = glm::normalize(otherObj.position - position);;
 		getGravityForce(GCONSTANT, otherObj);
+		double accel = gravity / mass;
 
-		velocity += direction * glm::dvec2(gravity * deltatime);
+		velocity += direction * glm::dvec2(accel * deltatime);
 		position += velocity * glm::dvec2(deltatime);
 	}
 };

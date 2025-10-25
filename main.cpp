@@ -17,8 +17,8 @@ gameData data;
 unsigned int windowWidth = 800;
 unsigned int windowHeight = 800;
 
-Object obj1(glm::dvec2(150, 150), glm::vec2(80, 80), glm::dvec2(150, 0), 1000000000);
-Object obj2(glm::dvec2(550, 550), glm::vec2(80, 80), glm::dvec2(-150, 0), 1000000000);
+Object obj1(glm::dvec2(100, 100), glm::vec2(80, 80), glm::dvec2(150, 0), 1e18);
+Object obj2(glm::dvec2(600, 600), glm::vec2(80, 80), glm::dvec2(-150, 0), 1e18);
 
 bool gameLogic(GLFWwindow *window, float deltatime) {
 	glViewport(0, 0, windowWidth, windowHeight);
