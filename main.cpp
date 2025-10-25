@@ -3,14 +3,13 @@
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include "gl2d.h"
-#include "obstacle.h"
 
 struct gameData {
-	glm::vec2 playerPosition = { 100, 350 };
-	glm::vec2 playerSize = { 80, 80 };
-	float playerRotation = 0.0f;
+	glm::dvec2 objectPosition = { 350, 0 };
+	glm::vec2 objectSize = { 80, 80 };
 
-	std::vector<Obstacle> obstacles = {};
+	glm::dvec2 velocity = { 0, 0 };
+	const float GRAVITY = 9.81f;
 };
 
 gl2d::Renderer2D renderer;
@@ -25,58 +24,23 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	renderer.updateWindowMetrics(windowWidth, windowHeight);
 	renderer.clearScreen({ 0.0f, 0.0f, 0.0f, 0.0f });
 
-	static float spawnTimer = 0.0f;
-	glm::vec2 move = {};
-	glm::vec2 playerPos = { data.playerPosition - data.playerSize / glm::vec2(2, 2) };
-
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		move.y = -1;
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		move.y = 1;
-	}
 
-	if (move.x != 0 || move.y != 0) {
-		move = glm::normalize(move);
-		move *= deltatime * 300;
-		data.playerPosition += move;
+	data.velocity.y += data.GRAVITY * deltatime;
+	data.objectPosition += data.velocity;
+
+	if (data.objectPosition.y >= 720) {
+		data.objectPosition.y = 720;
+		data.velocity.y *= -0.6;
 	}
 
-	spawnTimer += deltatime;
-	while (spawnTimer >= 0.5f) {
-		spawnTimer -= 0.5f;
-		Obstacle obs;
-		float y = 10.0f + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * (static_cast<float>(windowHeight) - 20.0f);
-		obs.position = glm::vec2(800.0f, y);
-		data.obstacles.push_back(obs);
+	if (std::fabs(data.velocity.y) < 0.05f && data.objectPosition.y > 718) {
+		data.velocity.y = 0.0f;
 	}
 
-
-	for (int i = 0; i < (int)data.obstacles.size(); i++) {
-		if (glm::distance(playerPos, data.obstacles[i].position) > 2000 || glm::distance(playerPos, data.obstacles[i].position - glm::vec2(10, 10)) <= 50) {
-			data.obstacles.erase(data.obstacles.begin() + i);
-			i--;
-			continue;
-		}
-
-		if (glm::distance(playerPos, data.obstacles[i].position - glm::vec2(10, 10)) <= 30) {
-			std::cout << "HIT" << '\n';
-			data.obstacles.erase(data.obstacles.begin() + i);
-			i--;
-			continue;
-		}
-
-		data.obstacles[i].step(deltatime);
-	}
-
-	for (int i = 0; i < (int)data.obstacles.size(); i++) {
-		data.obstacles[i].render(renderer);
-	}
-
-	renderer.renderRectangle({ data.playerPosition, data.playerSize }, { 1.0f, 1.0f, 1.0f, 1.0f }, {}, 0);
+	renderer.renderRectangle({ data.objectPosition, data.objectSize }, { 1.0f, 1.0f, 1.0f, 1.0f }, {}, 0);
 
 	renderer.flush();
 
