@@ -1,15 +1,14 @@
- #include <iostream>
+#include <iostream>
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include "gl2d.h"
+#include "object.h"
 
 struct gameData {
-	glm::dvec2 objectPosition = { 350, 0 };
-	glm::vec2 objectSize = { 80, 80 };
+	const double GCONSTANT = 6.67430e-11;
 
-	glm::dvec2 velocity = { 0, 0 };
-	const float GRAVITY = 9.81f;
+	std::vector<Object> objects;
 };
 
 gl2d::Renderer2D renderer;
@@ -17,6 +16,9 @@ gameData data;
 
 unsigned int windowWidth = 800;
 unsigned int windowHeight = 800;
+
+Object obj1(glm::dvec2(150, 150), glm::vec2(80, 80), glm::dvec2(150, 0), 1000000000);
+Object obj2(glm::dvec2(550, 550), glm::vec2(80, 80), glm::dvec2(-150, 0), 1000000000);
 
 bool gameLogic(GLFWwindow *window, float deltatime) {
 	glViewport(0, 0, windowWidth, windowHeight);
@@ -28,19 +30,15 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 		glfwSetWindowShouldClose(window, true);
 	}
 
-	data.velocity.y += data.GRAVITY * deltatime;
-	data.objectPosition += data.velocity;
-
-	if (data.objectPosition.y >= 720) {
-		data.objectPosition.y = 720;
-		data.velocity.y *= -0.6;
+	for (int i = 0; i < data.objects.size(); i++) {
+		data.objects[i].render(renderer);
+		if (i % 2 == 0) {
+			data.objects[i].step(deltatime, data.GCONSTANT, data.objects[i + 1]);
+		}
+		else {
+			data.objects[i].step(deltatime, data.GCONSTANT, data.objects[i - 1]);
+		}
 	}
-
-	if (std::fabs(data.velocity.y) < 0.05f && data.objectPosition.y > 718) {
-		data.velocity.y = 0.0f;
-	}
-
-	renderer.renderRectangle({ data.objectPosition, data.objectSize }, { 1.0f, 1.0f, 1.0f, 1.0f }, {}, 0);
 
 	renderer.flush();
 
@@ -78,6 +76,9 @@ int main() {
 
 	float deltatime = 0;
 	float lastframe = 0;
+
+	data.objects.push_back(obj1);
+	data.objects.push_back(obj2);
 
 	while (!glfwWindowShouldClose(window)) {
 		float currentframe = glfwGetTime();
