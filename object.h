@@ -6,16 +6,16 @@ public:
 	Object(glm::dvec2 objPosition) {
 		position = objPosition;
 	}
-	Object(glm::dvec2 objPosition, glm::vec2 objSize) {
+	Object(glm::dvec2 objPosition, float objSize) {
 		position = objPosition;
 		size = objSize;
 	}
-	Object(glm::dvec2 objPosition, glm::vec2 objSize, double objMass) {
+	Object(glm::dvec2 objPosition, float objSize, double objMass) {
 		position = objPosition;
 		size = objSize;
 		mass = objMass;
 	}
-	Object(glm::dvec2 objPosition, glm::vec2 objSize, double objMass, glm::dvec2 objVelocity) {
+	Object(glm::dvec2 objPosition, float objSize, double objMass, glm::dvec2 objVelocity) {
 		position = objPosition;
 		size = objSize;
 		velocity = objVelocity;
@@ -23,7 +23,7 @@ public:
 	}
 
 	glm::dvec2 position = { 350, 350 };
-	glm::vec2 size = { 80, 80 };
+	float size = 40;
 
 	glm::dvec2 velocity = { 0, 0 };
 	double mass = 1e18;
@@ -32,7 +32,7 @@ public:
 	glm::dvec2 accumulatedForce = { 0, 0 };
 
 	void render(gl2d::Renderer2D& renderer) {
-		renderer.renderRectangle({ position, size });
+		renderer.renderCircleOutline(position, 20, Colors_White, 4, 100);
 	}
 
 	void getAccumulatedForce(double GCONSTANT, Object& otherObj) {

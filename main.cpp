@@ -7,8 +7,11 @@
 
 struct gameData {
 	const double GCONSTANT = 6.67430e-11;
+	float timer = 0.2;
 
 	std::vector<Object> objects;
+	double cursorX;
+	double cursorY;
 };
 
 gl2d::Renderer2D renderer;
@@ -17,19 +20,22 @@ gameData data;
 unsigned int windowWidth = 800;
 unsigned int windowHeight = 800;
 
-Object obj1(glm::dvec2(0, 0), glm::vec2(80, 80), 1e18, glm::dvec2(150, 0));
-Object obj2(glm::dvec2(720, 720), glm::vec2(80, 80), 1e18, glm::dvec2(-150, 0));
-Object obj3(glm::dvec2(0, 720), glm::vec2(80, 80), 1e18, glm::dvec2(0, -150));
-Object obj4(glm::dvec2(720, 0), glm::vec2(80, 80), 1e18, glm::dvec2(0, 150));
-
 bool gameLogic(GLFWwindow *window, float deltatime) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT);
 	renderer.updateWindowMetrics(windowWidth, windowHeight);
 	renderer.clearScreen({ 0.0f, 0.0f, 0.0f, 0.0f });
+	data.timer += deltatime;
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
+	}
+
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && data.timer > 0.2) {
+		glfwGetCursorPos(window, &data.cursorX, &data.cursorY);
+		Object obj(glm::dvec2(data.cursorX, data.cursorY), 20);
+		data.objects.push_back(obj);
+		data.timer = 0;
 	}
 
 	for (int i = 0; i < data.objects.size(); i++) {
@@ -44,6 +50,12 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 
 	for (int i = 0; i < data.objects.size(); i++) {
 		data.objects[i].step(deltatime);
+	}
+
+	for (int i = 0; i < data.objects.size(); i++) {
+		if (data.objects[i].position.x > 20000) {
+			data.objects.erase(data.objects.begin() + i);
+		}
 	}
 
 	renderer.flush();
@@ -82,11 +94,6 @@ int main() {
 
 	float deltatime = 0;
 	float lastframe = 0;
-
-	data.objects.push_back(obj1);
-	data.objects.push_back(obj2);
-	data.objects.push_back(obj3);
-	data.objects.push_back(obj4);
 
 	while (!glfwWindowShouldClose(window)) {
 		float currentframe = glfwGetTime();
