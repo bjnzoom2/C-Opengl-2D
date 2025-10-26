@@ -17,8 +17,10 @@ gameData data;
 unsigned int windowWidth = 800;
 unsigned int windowHeight = 800;
 
-Object obj1(glm::dvec2(100, 100), glm::vec2(80, 80), glm::dvec2(150, 0), 1e18);
-Object obj2(glm::dvec2(600, 600), glm::vec2(80, 80), glm::dvec2(-150, 0), 1e18);
+Object obj1(glm::dvec2(0, 0), glm::vec2(80, 80), 1e18, glm::dvec2(150, 0));
+Object obj2(glm::dvec2(720, 720), glm::vec2(80, 80), 1e18, glm::dvec2(-150, 0));
+Object obj3(glm::dvec2(0, 720), glm::vec2(80, 80), 1e18, glm::dvec2(0, -150));
+Object obj4(glm::dvec2(720, 0), glm::vec2(80, 80), 1e18, glm::dvec2(0, 150));
 
 bool gameLogic(GLFWwindow *window, float deltatime) {
 	glViewport(0, 0, windowWidth, windowHeight);
@@ -32,12 +34,16 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 
 	for (int i = 0; i < data.objects.size(); i++) {
 		data.objects[i].render(renderer);
-		if (i % 2 == 0) {
-			data.objects[i].step(deltatime, data.GCONSTANT, data.objects[i + 1]);
+		for (int j = 0; j < data.objects.size(); j++) {
+			if (i == j) {
+				continue;
+			}
+			data.objects[i].getAccumulatedForce(data.GCONSTANT, data.objects[j]);
 		}
-		else {
-			data.objects[i].step(deltatime, data.GCONSTANT, data.objects[i - 1]);
-		}
+	}
+
+	for (int i = 0; i < data.objects.size(); i++) {
+		data.objects[i].step(deltatime);
 	}
 
 	renderer.flush();
@@ -79,6 +85,8 @@ int main() {
 
 	data.objects.push_back(obj1);
 	data.objects.push_back(obj2);
+	data.objects.push_back(obj3);
+	data.objects.push_back(obj4);
 
 	while (!glfwWindowShouldClose(window)) {
 		float currentframe = glfwGetTime();

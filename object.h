@@ -15,7 +15,7 @@ public:
 		size = objSize;
 		mass = objMass;
 	}
-	Object(glm::dvec2 objPosition, glm::vec2 objSize, glm::dvec2 objVelocity, double objMass) {
+	Object(glm::dvec2 objPosition, glm::vec2 objSize, double objMass, glm::dvec2 objVelocity) {
 		position = objPosition;
 		size = objSize;
 		velocity = objVelocity;
@@ -27,23 +27,28 @@ public:
 
 	glm::dvec2 velocity = { 0, 0 };
 	double mass = 1e18;
-	double gravity = 0;
+	double Fmag = 0;
+
+	glm::dvec2 accumulatedForce = { 0, 0 };
 
 	void render(gl2d::Renderer2D& renderer) {
 		renderer.renderRectangle({ position, size });
 	}
 
-	void getGravityForce(double GCONSTANT, Object& otherObj) {
+	void getAccumulatedForce(double GCONSTANT, Object& otherObj) {
+		glm::dvec2 direction = glm::normalize(otherObj.position - position);
 		double distance = glm::distance(position, otherObj.position);
-		gravity = GCONSTANT * (mass * otherObj.mass / std::pow(distance, 2));
+		Fmag = GCONSTANT * (mass * otherObj.mass / (distance * distance));
+		
+		accumulatedForce += direction * Fmag;
 	}
 
-	void step(float deltatime, double GCONSTANT, Object& otherObj) {
-		glm::dvec2 direction = glm::normalize(otherObj.position - position);;
-		getGravityForce(GCONSTANT, otherObj);
-		double accel = gravity / mass;
+	void step(float deltatime) {
+		glm::dvec2 accel = accumulatedForce / mass;
 
-		velocity += direction * glm::dvec2(accel * deltatime);
-		position += velocity * glm::dvec2(deltatime);
+		velocity += accel * (double)deltatime;
+		position += velocity * (double)deltatime;
+
+		accumulatedForce = glm::dvec2(0);
 	}
 };
