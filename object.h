@@ -26,7 +26,7 @@ public:
 	float size = 40;
 
 	glm::dvec2 velocity = { 0, 0 };
-	double mass = 1e18;
+	double mass = 5e17;
 	double Fmag = 0;
 
 	glm::dvec2 accumulatedForce = { 0, 0 };
