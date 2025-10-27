@@ -80,7 +80,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	}
 
 	for (int i = 0; i < data.objects.size(); i++) {
-		if (glm::distance(data.objects[i].position, (glm::dvec2)camera.position) > 40000) {
+		if (glm::distance(data.objects[i].position, (glm::dvec2)camera.position) > 60000) {
 			data.objects.erase(data.objects.begin() + i);
 		}
 	}
