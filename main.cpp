@@ -1,9 +1,11 @@
 #include <iostream>
+#include <filesystem>
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include "gl2d.h"
 #include "object.h"
+#include "tiledRenderer.h"
 
 struct gameData {
 	const double GCONSTANT = 6.67430e-11;
@@ -15,7 +17,10 @@ struct gameData {
 
 gl2d::Renderer2D renderer;
 gl2d::Camera camera;
+gl2d::Texture background;
+
 gameData data;
+TiledRenderer tiledRenderer;
 
 unsigned int windowWidth = 800;
 unsigned int windowHeight = 800;
@@ -26,6 +31,8 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	renderer.updateWindowMetrics(windowWidth, windowHeight);
 	renderer.clearScreen({ 0.0f, 0.0f, 0.0f, 0.0f });
 	data.timer += deltatime;
+
+	tiledRenderer.render(renderer);
 
 	glm::vec2 cameraMove = {};
 
@@ -73,7 +80,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	}
 
 	for (int i = 0; i < data.objects.size(); i++) {
-		if (data.objects[i].position.x > 20000) {
+		if (glm::distance(data.objects[i].position, (glm::dvec2)camera.position) > 40000) {
 			data.objects.erase(data.objects.begin() + i);
 		}
 	}
@@ -110,6 +117,12 @@ int main() {
 	gl2d::init();
 	renderer.create();
 	renderer.setCamera(camera);
+
+	std::filesystem::path backgroundPath = R"(C:\Users\luken\Downloads\stars.jpg)";
+
+	background.loadFromFile(backgroundPath.string().c_str(), false, true);
+
+	tiledRenderer.background = background;
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
