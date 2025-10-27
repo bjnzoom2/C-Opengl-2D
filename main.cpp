@@ -34,16 +34,16 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		cameraMove.y = 1;
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 		cameraMove.y = -1;
 	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+		cameraMove.y = 1;
+	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-		cameraMove.x = 1;
+		cameraMove.x = -1;
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		cameraMove.x = -1;
+		cameraMove.x = 1;
 	}
 
 	if (cameraMove.x != 0 || cameraMove.y != 0) {
