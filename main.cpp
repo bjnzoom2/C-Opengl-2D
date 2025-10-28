@@ -60,7 +60,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && data.timer > 0.2) {
 		glfwGetCursorPos(window, &data.cursorPos.x, &data.cursorPos.y);
-		Object obj(glm::dvec2(data.cursorPos.x + camera.position.x, data.cursorPos.y + camera.position.y), 20);
+		Object obj({ data.cursorPos.x + camera.position.x, data.cursorPos.y + camera.position.y }, 20);
 		data.objects.push_back(obj);
 		data.timer = 0;
 	}
@@ -80,7 +80,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	}
 
 	for (int i = 0; i < data.objects.size(); i++) {
-		if (glm::distance(data.objects[i].position, (glm::dvec2)camera.position) > 60000) {
+		if (glm::distance(data.objects[i].position, (glm::dvec2)camera.position) > 100000) {
 			data.objects.erase(data.objects.begin() + i);
 		}
 	}
@@ -94,8 +94,6 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 }
 
 int main() {
-	srand(time(NULL));
-
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -117,6 +115,8 @@ int main() {
 	gl2d::init();
 	renderer.create();
 	renderer.setCamera(camera);
+
+	camera.zoom = 1;
 
 	std::filesystem::path backgroundPath = R"(C:\Users\luken\Downloads\stars.jpg)";
 

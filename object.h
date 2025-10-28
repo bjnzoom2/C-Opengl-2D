@@ -27,7 +27,6 @@ public:
 
 	glm::dvec2 velocity = { 0, 0 };
 	double mass = 5e17;
-	double Fmag = 0;
 
 	glm::dvec2 accumulatedForce = { 0, 0 };
 
@@ -38,8 +37,8 @@ public:
 	void getAccumulatedForce(double GCONSTANT, Object& otherObj) {
 		glm::dvec2 direction = glm::normalize(otherObj.position - position);
 		double distance = glm::distance(position, otherObj.position);
-		Fmag = GCONSTANT * (mass * otherObj.mass / (distance * distance));
-		
+
+		double Fmag = GCONSTANT * (mass * otherObj.mass / (distance * distance));
 		accumulatedForce += direction * Fmag;
 	}
 
