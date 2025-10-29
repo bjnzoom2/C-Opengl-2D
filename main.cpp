@@ -3,6 +3,9 @@
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 #include "gl2d.h"
 #include "object.h"
 #include "tiledRenderer.h"
@@ -82,10 +85,22 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	for (int i = 0; i < data.objects.size(); i++) {
 		if (glm::distance(data.objects[i].position, (glm::dvec2)camera.position) > 100000) {
 			data.objects.erase(data.objects.begin() + i);
+			i--;
 		}
 	}
 
 	renderer.flush();
+
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::Begin("Data");
+	ImGui::Text("Objects count: %d", (int)data.objects.size());
+	ImGui::End();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
@@ -111,6 +126,12 @@ int main() {
 	glfwMakeContextCurrent(window);
 
 	gladLoadGL();
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 330");
 
 	gl2d::init();
 	renderer.create();
@@ -138,6 +159,10 @@ int main() {
 		gameLogic(window, deltatime);
 		renderer.popCamera();
 	}
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	renderer.cleanup();
 	glfwDestroyWindow(window);

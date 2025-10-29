@@ -27,25 +27,25 @@
     <ClCompile Include="gl2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\imgui.cpp">
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\backends\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\imgui_demo.cpp">
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\backends\imgui_impl_glfw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\imgui_draw.cpp">
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\imgui_tables.cpp">
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\imgui_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\imgui_widgets.cpp">
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\imgui_tables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\backends\imgui_impl_glfw.cpp">
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\backends\imgui_impl_opengl3.cpp">
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\imgui_demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

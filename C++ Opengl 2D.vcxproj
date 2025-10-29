@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\luken\source\repos\C++ Opengl 2D\External\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glad\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glm-1.0.1-light;C:\Users\luken\Downloads\imgui-1.92.4\imgui-1.92.4;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\luken\source\repos\C++ Opengl 2D\External\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glad\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glm-1.0.1-light;C:\Users\luken\source\repos\C++ Opengl 2D\External\imgui-1.92.4\imgui-1.92.4;C:\Users\luken\source\repos\C++ Opengl 2D\External\imgui-1.92.4\imgui-1.92.4\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\luken\source\repos\C++ Opengl 2D\External\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glad\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glm-1.0.1-light;C:\Users\luken\Downloads\imgui-1.92.4\imgui-1.92.4;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\luken\source\repos\C++ Opengl 2D\External\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glad\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glm-1.0.1-light;C:\Users\luken\source\repos\C++ Opengl 2D\External\imgui-1.92.4\imgui-1.92.4;C:\Users\luken\source\repos\C++ Opengl 2D\External\imgui-1.92.4\imgui-1.92.4\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\luken\source\repos\C++ Opengl 2D\External\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glad\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glm-1.0.1-light;C:\Users\luken\Downloads\imgui-1.92.4\imgui-1.92.4;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\luken\source\repos\C++ Opengl 2D\External\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glad\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glm-1.0.1-light;C:\Users\luken\source\repos\C++ Opengl 2D\External\imgui-1.92.4\imgui-1.92.4;C:\Users\luken\source\repos\C++ Opengl 2D\External\imgui-1.92.4\imgui-1.92.4\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -128,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\luken\source\repos\C++ Opengl 2D\External\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glad\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glm-1.0.1-light;C:\Users\luken\Downloads\imgui-1.92.4\imgui-1.92.4;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\luken\source\repos\C++ Opengl 2D\External\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glad\include;C:\Users\luken\source\repos\C++ Opengl 2D\External\glm-1.0.1-light;C:\Users\luken\source\repos\C++ Opengl 2D\External\imgui-1.92.4\imgui-1.92.4;C:\Users\luken\source\repos\C++ Opengl 2D\External\imgui-1.92.4\imgui-1.92.4\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -139,14 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\backends\imgui_impl_glfw.cpp" />
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\backends\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\imgui.cpp" />
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\imgui_demo.cpp" />
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\imgui_draw.cpp" />
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\imgui_tables.cpp" />
-    <ClCompile Include="..\..\..\Downloads\imgui-1.92.4\imgui-1.92.4\imgui_widgets.cpp" />
     <ClCompile Include="External\glad\src\glad.c" />
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\imgui.cpp" />
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\imgui_demo.cpp" />
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\imgui_draw.cpp" />
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\imgui_tables.cpp" />
+    <ClCompile Include="External\imgui-1.92.4\imgui-1.92.4\imgui_widgets.cpp" />
     <ClCompile Include="gl2d.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stb.cpp" />
