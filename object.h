@@ -51,8 +51,11 @@ public:
 		accumulatedForce += direction * Fmag;
 	}
 
-	void step(float deltatime) {
-		glm::dvec2 accel = accumulatedForce / mass;
+	void step(float deltatime, bool gravity) {
+		glm::dvec2 accel = {};
+		if (gravity) {
+			accel = accumulatedForce / mass;
+		}
 
 		velocity += accel * (double)deltatime;
 		position += velocity * (double)deltatime;

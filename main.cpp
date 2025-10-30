@@ -20,6 +20,8 @@ struct gameData {
 	double currentMass = 5e17;
 	float currentColor[4] = { 1, 1, 1, 1 };
 	glm::vec4 vecColor = { 1, 1, 1, 1 };
+
+	bool gravityEnabled = true;
 };
 
 gl2d::Renderer2D renderer;
@@ -83,7 +85,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	}
 
 	for (int i = 0; i < data.objects.size(); i++) {
-		data.objects[i].step(deltatime);
+		data.objects[i].step(deltatime, data.gravityEnabled);
 	}
 
 	for (int i = 0; i < data.objects.size(); i++) {
@@ -107,6 +109,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	if (ImGui::Button("Clear objects")) {
 		data.objects.clear();
 	}
+	ImGui::Checkbox("Gravity", &data.gravityEnabled);
 
 	for (int i = 0; i < 4; i++) {
 		data.vecColor[i] = data.currentColor[i];
