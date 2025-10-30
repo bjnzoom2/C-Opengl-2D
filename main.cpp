@@ -18,6 +18,8 @@ struct gameData {
 	glm::dvec2 cursorPos = {};
 
 	double currentMass = 5e17;
+	float currentColor[4] = { 1, 1, 1, 1 };
+	glm::vec4 vecColor = { 1, 1, 1, 1 };
 };
 
 gl2d::Renderer2D renderer;
@@ -65,7 +67,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && data.timer > 0.2) {
 		glfwGetCursorPos(window, &data.cursorPos.x, &data.cursorPos.y);
-		Object obj({ data.cursorPos.x + camera.position.x, data.cursorPos.y + camera.position.y }, 20, data.currentMass);
+		Object obj(data.vecColor, {data.cursorPos.x + camera.position.x, data.cursorPos.y + camera.position.y}, 20, data.currentMass);
 		data.objects.push_back(obj);
 		data.timer = 0;
 	}
@@ -101,9 +103,17 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 
 	ImGui::Text("Objects count: %d", (int)data.objects.size());
 	ImGui::InputDouble("Mass", &data.currentMass);
+	ImGui::ColorEdit4("Object Color", data.currentColor);
+	if (ImGui::Button("Clear objects")) {
+		data.objects.clear();
+	}
+
+	for (int i = 0; i < 4; i++) {
+		data.vecColor[i] = data.currentColor[i];
+	}
 
 	ImGui::Text("\nObject data");
-	ImGui::BeginChild("Scrolling");
+	ImGui::BeginChild("Scrolling", {}, ImGuiChildFlags_Border);
 	for (int i = 0; i < data.objects.size(); i++) {
 		ImGui::Text("Object %d: Mass = %e\nPosition = (%g, %g)", i + 1, data.objects[i].mass, data.objects[i].position.x, data.objects[i].position.y);
 	}

@@ -2,20 +2,27 @@
 
 class Object {
 public:
-	Object() {};
-	Object(glm::dvec2 objPosition) {
+	Object() {}
+	Object(glm::vec4 objColor) {
+		color = objColor;
+	}
+	Object(glm::vec4 objColor, glm::dvec2 objPosition) {
+		color = objColor;
 		position = objPosition;
 	}
-	Object(glm::dvec2 objPosition, float objSize) {
+	Object(glm::vec4 objColor, glm::dvec2 objPosition, float objSize) {
+		color = objColor;
 		position = objPosition;
 		size = objSize;
 	}
-	Object(glm::dvec2 objPosition, float objSize, double objMass) {
+	Object(glm::vec4 objColor, glm::dvec2 objPosition, float objSize, double objMass) {
+		color = objColor;
 		position = objPosition;
 		size = objSize;
 		mass = objMass;
 	}
-	Object(glm::dvec2 objPosition, float objSize, double objMass, glm::dvec2 objVelocity) {
+	Object(glm::vec4 objColor, glm::dvec2 objPosition, float objSize, double objMass, glm::dvec2 objVelocity) {
+		color = objColor;
 		position = objPosition;
 		size = objSize;
 		velocity = objVelocity;
@@ -30,8 +37,10 @@ public:
 
 	glm::dvec2 accumulatedForce = { 0, 0 };
 
+	glm::vec4 color = { 1, 1, 1, 1 };
+
 	void render(gl2d::Renderer2D& renderer) {
-		renderer.renderCircleOutline(position, 20, Colors_White, 4, 100);
+		renderer.renderCircleOutline(position, 20, color, 4, 100);
 	}
 
 	void getAccumulatedForce(double GCONSTANT, Object& otherObj) {
