@@ -16,6 +16,8 @@ struct gameData {
 
 	std::vector<Object> objects;
 	glm::dvec2 cursorPos = {};
+
+	double currentMass = 5e17;
 };
 
 gl2d::Renderer2D renderer;
@@ -61,9 +63,9 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 		camera.position += 1000 * deltatime * cameraMove;
 	}
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && data.timer > 0.2) {
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && data.timer > 0.2) {
 		glfwGetCursorPos(window, &data.cursorPos.x, &data.cursorPos.y);
-		Object obj({ data.cursorPos.x + camera.position.x, data.cursorPos.y + camera.position.y }, 20);
+		Object obj({ data.cursorPos.x + camera.position.x, data.cursorPos.y + camera.position.y }, 20, data.currentMass);
 		data.objects.push_back(obj);
 		data.timer = 0;
 	}
@@ -95,8 +97,18 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("Data");
+	ImGui::Begin("Debug");
+
 	ImGui::Text("Objects count: %d", (int)data.objects.size());
+	ImGui::InputDouble("Mass", &data.currentMass);
+
+	ImGui::Text("\nObject data");
+	ImGui::BeginChild("Scrolling");
+	for (int i = 0; i < data.objects.size(); i++) {
+		ImGui::Text("Object %d: Mass = %e\nPosition = (%g, %g)", i + 1, data.objects[i].mass, data.objects[i].position.x, data.objects[i].position.y);
+	}
+	ImGui::EndChild();
+
 	ImGui::End();
 
 	ImGui::Render();
