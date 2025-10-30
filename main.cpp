@@ -62,7 +62,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 
 	if (cameraMove.x != 0 || cameraMove.y != 0) {
 		cameraMove = glm::normalize(cameraMove);
-		camera.position += 1000 * deltatime * cameraMove;
+		camera.position += 1600 * deltatime * cameraMove;
 	}
 
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && data.timer > 0.2) {
