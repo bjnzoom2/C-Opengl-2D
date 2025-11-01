@@ -67,7 +67,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 		camera.position += 1600 * deltatime * cameraMove;
 	}
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && data.timer > 0.2) {
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS && data.timer > 0.2) {
 		glfwGetCursorPos(window, &data.cursorPos.x, &data.cursorPos.y);
 		Object obj(data.vecColor, {data.cursorPos.x + camera.position.x, data.cursorPos.y + camera.position.y}, 20, data.currentMass);
 		data.objects.push_back(obj);
