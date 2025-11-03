@@ -17,10 +17,15 @@ struct gameData {
 	std::vector<Object> objects;
 	glm::dvec2 cursorPos = {};
 
-	double currentMass = 5e17;
-	float currentColor[4] = { 1, 1, 1, 1 };
-	glm::vec4 vecColor = { 1, 1, 1, 1 };
+	double initMass = 5e17;
+	float initColor[4] = { 1, 1, 1, 1 };
+	float initDir[2] = { 1, 0 };
+	double initVeloc = 0;
 
+	glm::vec4 vecColor = { 1, 1, 1, 1 };
+	glm::dvec2 vecDir = { 1, 0 };
+
+	bool paused = false;
 	bool gravityEnabled = true;
 };
 
@@ -69,7 +74,7 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS && data.timer > 0.2) {
 		glfwGetCursorPos(window, &data.cursorPos.x, &data.cursorPos.y);
-		Object obj(data.vecColor, {data.cursorPos.x + camera.position.x, data.cursorPos.y + camera.position.y}, 20, data.currentMass);
+		Object obj(data.vecColor, {data.cursorPos.x + camera.position.x, data.cursorPos.y + camera.position.y}, 20, data.initMass, data.initVeloc * data.vecDir);
 		data.objects.push_back(obj);
 		data.timer = 0;
 	}
@@ -85,7 +90,9 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	}
 
 	for (int i = 0; i < data.objects.size(); i++) {
-		data.objects[i].step(deltatime, data.gravityEnabled);
+		if (!data.paused) {
+			data.objects[i].step(deltatime, data.gravityEnabled);
+		}
 	}
 
 	for (int i = 0; i < data.objects.size(); i++) {
@@ -104,16 +111,34 @@ bool gameLogic(GLFWwindow *window, float deltatime) {
 	ImGui::Begin("Debug");
 
 	ImGui::Text("Objects count: %d", (int)data.objects.size());
-	ImGui::InputDouble("Mass", &data.currentMass);
-	ImGui::ColorEdit4("Object Color", data.currentColor);
+	ImGui::InputDouble("Mass", &data.initMass);
+	ImGui::ColorEdit4("Object Color", data.initColor);
+	ImGui::InputFloat2("Direction", data.initDir);
+	ImGui::InputDouble("Velocity", &data.initVeloc);
+
+	if (!data.paused) {
+		if (ImGui::Button("Pause")) {
+			data.paused = !data.paused;
+		}
+	}
+	else {
+		if (ImGui::Button("Unpause")) {
+			data.paused = !data.paused;
+		}
+	}
+
 	if (ImGui::Button("Clear objects")) {
 		data.objects.clear();
 	}
 	ImGui::Checkbox("Gravity", &data.gravityEnabled);
 
 	for (int i = 0; i < 4; i++) {
-		data.vecColor[i] = data.currentColor[i];
+		data.vecColor[i] = data.initColor[i];
 	}
+	for (int i = 0; i < 2; i++) {
+		data.vecDir[i] = data.initDir[i];
+	}
+	data.vecDir = glm::normalize(data.vecDir);
 
 	ImGui::Text("\nObject data");
 	ImGui::BeginChild("Scrolling", {}, ImGuiChildFlags_Border);

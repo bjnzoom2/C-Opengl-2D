@@ -40,7 +40,7 @@ public:
 	glm::vec4 color = { 1, 1, 1, 1 };
 
 	void render(gl2d::Renderer2D& renderer) {
-		renderer.renderCircleOutline(position, 20, color, 4, 100);
+		renderer.renderCircleOutline(position, size, color, 4, 100);
 	}
 
 	void getAccumulatedForce(double GCONSTANT, Object& otherObj) {
