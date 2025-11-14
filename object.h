@@ -3,39 +3,20 @@
 class Object {
 public:
 	Object() {}
-	Object(glm::vec4 objColor) {
-		color = objColor;
-	}
-	Object(glm::vec4 objColor, glm::dvec2 objPosition) {
-		color = objColor;
-		position = objPosition;
-	}
-	Object(glm::vec4 objColor, glm::dvec2 objPosition, float objSize) {
-		color = objColor;
-		position = objPosition;
-		size = objSize;
-	}
-	Object(glm::vec4 objColor, glm::dvec2 objPosition, float objSize, double objMass) {
-		color = objColor;
-		position = objPosition;
-		size = objSize;
-		mass = objMass;
-	}
-	Object(glm::vec4 objColor, glm::dvec2 objPosition, float objSize, double objMass, glm::dvec2 objVelocity) {
-		color = objColor;
-		position = objPosition;
-		size = objSize;
-		velocity = objVelocity;
-		mass = objMass;
-	}
+	Object(glm::vec4 objColor) : color(objColor) {}
+	Object(glm::vec4 objColor, glm::dvec2 objPosition) : color(objColor), position(objPosition) {}
+	Object(glm::vec4 objColor, glm::dvec2 objPosition, float objSize) : color(objColor), position(objPosition), size(objSize) {}
+	Object(glm::vec4 objColor, glm::dvec2 objPosition, float objSize, double objMass) : color(objColor), position(objPosition), size(objSize), mass(objMass) {if (mass == 0) mass = 1;}
+	Object(glm::vec4 objColor, glm::dvec2 objPosition, float objSize, double objMass, glm::dvec2 objVelocity) : color(objColor), position(objPosition), size(objSize), mass(objMass),
+	velocity(objVelocity) {if (mass == 0) mass = 1;}
 
 	glm::dvec2 position = { 350, 350 };
 	float size = 40;
 
-	glm::dvec2 velocity = { 0, 0 };
+	glm::dvec2 velocity = {};
 	double mass = 5e17;
 
-	glm::dvec2 accumulatedForce = { 0, 0 };
+	glm::dvec2 accumulatedForce = {};
 
 	glm::vec4 color = { 1, 1, 1, 1 };
 
@@ -46,6 +27,7 @@ public:
 	void getAccumulatedForce(double GCONSTANT, Object& otherObj) {
 		glm::dvec2 direction = glm::normalize(otherObj.position - position);
 		double distance = glm::distance(position, otherObj.position);
+		if (distance <= 1) return;
 
 		double Fmag = GCONSTANT * (mass * otherObj.mass / (distance * distance));
 		accumulatedForce += direction * Fmag;
