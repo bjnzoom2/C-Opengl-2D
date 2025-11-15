@@ -31,6 +31,23 @@ public:
 
 		double Fmag = GCONSTANT * (mass * otherObj.mass / (distance * distance));
 		accumulatedForce += direction * Fmag;
+
+		glm::dvec2 normal = (position - otherObj.position) / distance;
+		if (distance <= size + otherObj.size) {
+			glm::dvec2 tangent(normal.y, -normal.x);
+
+			double relativeSpeedAlongNormal = glm::dot(velocity - otherObj.velocity, normal);
+			double relativeSpeedAlongTangent = glm::dot(velocity - otherObj.velocity, tangent);
+
+			glm::dvec2 collisionForce = {};
+			collisionForce += relativeSpeedAlongNormal / 2 * normal * 1.9;
+
+			velocity -= collisionForce;
+			otherObj.velocity += collisionForce;
+
+			double penetration = (size + otherObj.size) - distance;
+			position += normal * penetration;
+		}
 	}
 
 	void step(float deltatime, bool gravity) {
